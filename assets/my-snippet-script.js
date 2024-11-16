@@ -1,0 +1,1 @@
+alert('its from snippet');

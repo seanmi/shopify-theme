@@ -1,1 +1,0 @@
-alert('its from snippet');

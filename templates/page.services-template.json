@@ -11,13 +11,49 @@
   "sections": {
     "main": {
       "type": "main-page",
+      "custom_css": [],
       "settings": {
         "padding_top": 28,
         "padding_bottom": 28
       }
+    },
+    "multirow_LKzQmk": {
+      "type": "multirow",
+      "blocks": {
+        "row_BaNU8b": {
+          "type": "row",
+          "repeater": "{{ page.metafields.custom.services_metafield.value }}",
+          "settings": {
+            "caption": "{{ block.repeater.service_name.value }}",
+            "heading": "{{ block.repeater.service_name.value }}",
+            "text": "<p>{{ block.repeater.description | metafield_tag }}</p>",
+            "button_label": "Button label",
+            "button_link": "{{ block.repeater.system.url }}"
+          }
+        }
+      },
+      "block_order": [
+        "row_BaNU8b"
+      ],
+      "settings": {
+        "image_height": "medium",
+        "desktop_image_width": "medium",
+        "heading_size": "h1",
+        "text_style": "body",
+        "button_style": "secondary",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "left",
+        "image_layout": "alternate-left",
+        "section_color_scheme": "",
+        "row_color_scheme": "",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "multirow_LKzQmk"
   ]
 }

@@ -13,19 +13,34 @@ The current threshold is set to 5000
 ## Files
 
 - `snippets/free-shipping-progress-bar.liquid` - Main component template
+- `assets/free-shipping-progress-bar.js` - JS Component
 - `assets/free-shipping-progress-bar.css` - Styling and animation
 - `locales/en.default.json` - Translations
 
+## Web Component
+
+The progress bar is implemented as a custom web component `<free-shipping-progress-bar>`.
+
 ## Liquid Snippet
 
-The snippet calculates progress and renders the component:
+The snippet calculates progress (excluding gift cards) and renders the component:
 
 ````liquid
 {% liquid
   assign threshold_metafield = shop.metafields.custom.free_shipping_threshold
   assign free_shipping_threshold = threshold_metafield
-  assign cart_total = cart.total_price | divided_by: 100.0
-  assign remaining = free_shipping_threshold | minus: cart_total
+
+  # Calculate cart total excluding gift cards
+  assign cart_total_cents = 0
+  for item in cart.items
+    assign product_type_lower = item.product.type | downcase
+    unless product_type_lower == 'giftcard'
+      assign cart_total_cents = cart_total_cents | plus: item.line_price
+    endunless
+  endfor
+
+  assign cart_total = cart_total_cents | divided_by: 100.0
+  assign remaining = free_shipping_threshold | times: 100 | minus: cart_total_cents
   assign progress_percentage = cart_total | times: 100 | divided_by: free_shipping_threshold | floor
 %}
 

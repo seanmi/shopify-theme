@@ -21,6 +21,20 @@ The current threshold is set to 5000
 
 The progress bar is implemented as a custom web component `<free-shipping-progress-bar>`.
 
+```javascript
+class FreeShippingProgressBar extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    // Component is connected to the DOM
+  }
+}
+
+customElements.define("free-shipping-progress-bar", FreeShippingProgressBar);
+```
+
 ## Liquid Snippet
 
 The snippet calculates progress (excluding gift cards) and renders the component:

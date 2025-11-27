@@ -16,8 +16,6 @@ The current threshold is set to 5000
 - `assets/free-shipping-progress-bar.css` - Styling and animation
 - `locales/en.default.json` - Translations
 
-## Implementation
-
 ## Liquid Snippet
 
 The snippet calculates progress and renders the component:

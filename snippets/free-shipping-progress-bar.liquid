@@ -19,8 +19,15 @@
     # Assign the threshold value
     assign free_shipping_threshold = threshold_metafield
 
-    # Calculate cart total in dollars
-    assign cart_total_cents = cart.total_price
+    # Calculate cart total (excluding gift cards)
+    assign cart_total_cents = 0
+    for item in cart.items
+      assign product_type_lower = item.product.type | downcase
+      unless product_type_lower == 'giftcard'
+        assign cart_total_cents = cart_total_cents | plus: item.line_price
+      endunless
+    endfor
+
     assign cart_total = cart_total_cents | divided_by: 100.0
 
     # Calculate remaining amount to reach threshold
@@ -45,7 +52,7 @@
 
 {% comment %} Only show if cart is not empty and show_progress_bar is true {% endcomment %}
 {% if cart.item_count > 0 and show_progress_bar %}
-  <div
+  <free-shipping-progress-bar
     data-progress="{{ progress_percentage }}"
     class="free-shipping-progress-bar{% if is_complete %} free-shipping-progress-bar--complete{% endif %}"
   >
@@ -80,5 +87,5 @@
         <span>{{ threshold_metafield | times: 100 | money }}</span>
       </div>
     </div>
-  </div>
+  </free-shipping-progress-bar>
 {% endif %}

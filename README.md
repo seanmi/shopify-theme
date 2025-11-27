@@ -8,6 +8,8 @@ Added shop metafield `custom.free_shipping_threshold` to allow user to configure
 
 User also needs to configure the Shipping and Delivery or Create A discount that would match the threshold
 
+The current threshold is set to 5000
+
 ## Files
 
 - `snippets/free-shipping-progress-bar.liquid` - Main component template
@@ -72,7 +74,7 @@ Added to cart drawer (`snippets/cart-drawer.liquid`):
 
 ## How It Works
 
-1. **Check threshold**: Reads `custom.free_shipping_threshold` metafield (hides if not set)
+1. **Check threshold**: Reads `custom.free_shipping_threshold` metafield (hides progress bar if not set)
 2. **Calculate remaining**: `threshold - cart total`
 3. **Calculate progress**: `(cart total / threshold) * 100`
 4. **Set CSS variable**: Liquid sets `--progress-width` to the calculated percentage

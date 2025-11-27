@@ -1,0 +1,80 @@
+/* Free Shipping Progress Bar Component */
+
+.free-shipping-progress-bar {
+  background-color: rgba(var(--color-foreground), 0.04);
+}
+
+.free-shipping-progress-bar__container {
+  max-width: 120rem;
+  margin: 0 auto;
+  padding: 1rem 1.6rem;
+  background-color: #f5f5f5;
+  margin-bottom: 1rem;
+}
+
+/* Message Text */
+.free-shipping-progress-bar__message {
+  margin: 0 0 1.2rem 0;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: rgba(var(--color-foreground), 0.75);
+  line-height: 1.4;
+}
+
+.free-shipping-progress-bar__message--complete {
+  color: rgb(22, 163, 74);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* Progress Bar Track (background) */
+.free-shipping-progress-bar__track {
+  width: 100%;
+  height: 0.8rem;
+  background-color: rgba(var(--color-foreground), 0.1);
+  border-radius: 0.4rem;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Progress Bar Fill (animated via CSS) */
+.free-shipping-progress-bar__fill {
+  height: 100%;
+  background-color: rgb(var(--color-button));
+  border-radius: 0.4rem;
+  width: 0%;
+  animation: progressFill 0.8s ease-out forwards;
+  display: block !important;
+}
+
+/* Animation keyframes - uses CSS variable */
+@keyframes progressFill {
+  to {
+    width: var(--progress-width, 0%);
+  }
+}
+
+.free-shipping-progress-bar__fill {
+  height: 100%;
+  background-color: rgb(var(--color-button));
+  border-radius: 0.4rem;
+  width: 0%;
+  animation: progressFill 0.8s ease-out forwards;
+}
+
+/* Free Shipping Unlocked State */
+.free-shipping-progress-bar--complete .free-shipping-progress-bar__fill {
+  background-color: rgb(22, 163, 74);
+}
+
+/* Price Labels */
+.free-shipping-progress-bar__labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.8rem;
+  font-size: 1.2rem;
+}
+
+
+

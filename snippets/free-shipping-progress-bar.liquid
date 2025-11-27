@@ -1,0 +1,84 @@
+{% comment %}
+  Free Shipping Progress Bar
+
+  Displays progress toward free shipping threshold.
+  Threshold is configured via shop metafield: custom.free_shipping_threshold
+
+  Usage:
+  {% render 'free-shipping-progress-bar' %}
+{% endcomment %}
+
+{% liquid
+  # Get threshold from shop metafield. Assigned fallback value if
+  assign threshold_metafield = shop.metafields.custom.free_shipping_threshold
+  assign show_progress_bar = false
+  if threshold_metafield != blank
+    # Show the progress bar
+    assign show_progress_bar = true
+
+    # Assign the threshold value
+    assign free_shipping_threshold = threshold_metafield
+
+    # Calculate cart total in dollars
+    assign cart_total_cents = cart.total_price
+    assign cart_total = cart_total_cents | divided_by: 100.0
+
+    # Calculate remaining amount to reach threshold
+    assign remaining = free_shipping_threshold | times: 100 | minus: cart_total_cents
+    assign remaining_formatted = remaining | money
+
+    # Calculate progress percentage (0-100)
+    assign progress_percentage = cart_total | times: 100 | divided_by: free_shipping_threshold | floor
+
+    # Cap at 100%
+    if progress_percentage > 100
+      assign progress_percentage = 100
+    endif
+
+    # Determine if free shipping is unlocked
+    assign is_complete = false
+    if progress_percentage >= 100
+      assign is_complete = true
+    endif
+  endif
+%}
+
+{% comment %} Only show if cart is not empty and show_progress_bar is true {% endcomment %}
+{% if cart.item_count > 0 and show_progress_bar %}
+  <div
+    data-progress="{{ progress_percentage }}"
+    class="free-shipping-progress-bar{% if is_complete %} free-shipping-progress-bar--complete{% endif %}"
+  >
+    <div class="free-shipping-progress-bar__container">
+      {% comment %} Message {% endcomment %}
+      <p class="free-shipping-progress-bar__message{% if is_complete %} free-shipping-progress-bar__message--complete{% endif %}">
+        {% if is_complete %}
+          <span>✓</span>
+          <span>{{ 'sections.cart.free_shipping.unlocked' | t }}</span>
+        {% else %}
+          {% assign remaining_formatted = remaining | money %}
+          {{ 'sections.cart.free_shipping.away_from' | t: amount: remaining_formatted }}
+        {% endif %}
+      </p>
+
+      {% comment %} Progress Bar {% endcomment %}
+      <div class="free-shipping-progress-bar__track">
+        <div
+          class="free-shipping-progress-bar__fill"
+          style="--progress-width: {{ progress_percentage }}%;"
+          role="progressbar"
+          aria-valuenow="{{ progress_percentage }}"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-label="{{ 'sections.cart.free_shipping.progress_label' | t }}"
+        ></div>
+      </div>
+
+      {% comment %} Price Labels {% endcomment %}
+      <div class="free-shipping-progress-bar__labels">
+        <span>{{ 0 | times: 100 | money }}</span>
+        <span>{{ threshold_metafield | times: 100 | money }}</span>
+      </div>
+    </div>
+  </div>
+{% endif %}
